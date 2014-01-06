@@ -159,7 +159,15 @@
 
       sessionManager.restore(function(session) {
         scope.currentSession = session;
+        if (session.user != null) {
+          localStorageService.add('userPermissions',session.user.userPermissions);
+        };
       });
+
+      $rootScope.showTask = function(taskName){
+        $rootScope.userPermissions = localStorageService.get('userPermissions');
+        return _.contains($rootScope.userPermissions, "ALL_FUNCTIONS_READ") || _.contains($rootScope.userPermissions, taskName);
+      };
     }
   });
   mifosX.ng.application.controller('MainController', [
