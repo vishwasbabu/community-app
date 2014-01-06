@@ -18,7 +18,7 @@ define(['underscore', 'mifosX'], function() {
       'main/TaskController',
       'main/SearchController',
       'main/NavigationController',
-      'collection/EnterCollectionSheetController',
+      'collection/CollectionSheetController',
       'loanAccount/ViewLoanDetailsController',
       'loanAccount/NewLoanAccAppController',
       'loanAccount/LoanAccountActionsController',
@@ -33,6 +33,7 @@ define(['underscore', 'mifosX'], function() {
       'loanAccount/NewJLGLoanAccAppController',
       'loanAccount/LoanDocumentController',
       'loanAccount/ViewLoanTransactionController',
+      'loanAccount/LoanScreenReportController',
       'groups/AssignStaffController',
       'client/ClientController',
       'client/EditClientController',
@@ -43,6 +44,7 @@ define(['underscore', 'mifosX'], function() {
       'client/ClientDocumentController',
       'client/ClientIdentifierController',
       'client/UploadClientIdentifierDocumentController',
+      'client/ClientScreenReportController',
       'product/LoanProductController',
       'product/CreateLoanProductController',
       'product/CreateSavingProductController',
@@ -108,9 +110,12 @@ define(['underscore', 'mifosX'], function() {
       'system/ViewSchedulerJobHistoryController',
       'organization/HolController',
       'organization/ViewHolController',
+      'organization/EditHolidayController',
       'organization/AddHolController',
       'reports/ViewReportsController',
       'reports/RunReportsController',
+      'reports/XBRLController',
+      'reports/XBRLReportController',
       'savings/CreateSavingAccountController',
       'savings/ViewSavingDetailsController',
       'private/SuperuserController',
@@ -155,17 +160,20 @@ define(['underscore', 'mifosX'], function() {
       'loanAccount/GuarantorController',
       'loanAccount/EditGuarantorController',
       'main/ViewCheckerinboxController',
-      'main/ExpertSearchController'
+      'main/ExpertSearchController',
+      'main/ProfileController',
+      'main/ViewMakerCheckerTaskController'
     ],
     filters: [
       'StatusLookup',
       'DateFormat',
       'DayMonthFormat',
       'YesOrNo',
-      'UrlToString'
+      'UrlToString',
+      'sort',
+      'DotRemove',
     ],
     directives: [
-      'DataTablesDirective',
       'DialogDirective',
       'PanelDirective',
       'BigPanelDirective',
@@ -179,7 +187,8 @@ define(['underscore', 'mifosX'], function() {
       'FormSubmitValidateDirective',
       'ApiValidationDirective',
       'ActivitiesDisplayPanelDirective',
-      'ScrollbarTopDirective'
+      'ScrollbarTopDirective',
+      'ChosenComboboxDirective'
     ]
   };
 

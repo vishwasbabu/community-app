@@ -1,11 +1,21 @@
 (function(module) {
   mifosX.controllers = _.extend(module, {
-    MainController: function(scope, location, sessionManager, translate,$rootScope,localStorageService) {
+    MainController: function(scope, location, sessionManager, translate,$rootScope,localStorageService,keyboardManager) {
         scope.activity = {};
         scope.activityQueue = [];
         if(localStorageService.get('Location')){
             scope.activityQueue = localStorageService.get('Location');
         }
+        scope.setDf = function(){
+            if(localStorageService.get('dateformat')){
+                scope.dateformat = localStorageService.get('dateformat');
+            }else{
+                localStorageService.add('dateformat','dd MMMM yyyy');
+                scope.dateformat = 'dd MMMM yyyy';
+            }
+            scope.df = scope.dateformat;
+        };
+        scope.setDf();
         scope.$watch(function() {
             return location.path();
         }, function() {
@@ -33,8 +43,17 @@
       };
 
       scope.langs = mifosX.models.Langs;
-      
-      scope.optlang = scope.langs[0];
+        if(localStorageService.get('Language')){
+            var temp=localStorageService.get('Language');
+            for(var i in mifosX.models.Langs){
+                if(mifosX.models.Langs[i].code == temp.code){
+                    scope.optlang = mifosX.models.Langs[i];
+                }
+            }
+        } else{
+            scope.optlang = scope.langs[0];
+        }
+        translate.uses(scope.optlang.code);
 
       scope.isActive = function (route) {
           if(route == 'clients'){
@@ -76,14 +95,79 @@
           }
       };
 
+        keyboardManager.bind('ctrl+shift+n', function() {
+            location.path('/nav/offices');
+        });
+        keyboardManager.bind('ctrl+shift+i', function() {
+            location.path('/tasks');
+        });
+        keyboardManager.bind('ctrl+shift+o', function() {
+            location.path('/entercollectionsheet');
+        });
+        keyboardManager.bind('ctrl+shift+c', function() {
+            location.path('/createclient');
+        });
+        keyboardManager.bind('ctrl+shift+g', function() {
+            location.path('/creategroup');
+        });
+        keyboardManager.bind('ctrl+shift+q', function() {
+            location.path('/createcenter');
+        });
+        keyboardManager.bind('ctrl+shift+f', function() {
+            location.path('/freqposting');
+        });
+        keyboardManager.bind('ctrl+shift+e', function() {
+            location.path('/accounts_closure');
+        });
+        keyboardManager.bind('ctrl+shift+j', function() {
+            location.path('/journalentry');
+        });
+        keyboardManager.bind('ctrl+shift+a', function() {
+            location.path('/accounting');
+        });
+        keyboardManager.bind('ctrl+shift+r', function() {
+            location.path('/reports/all');
+        });
+        keyboardManager.bind('ctrl+s', function() {
+            document.getElementById('save').click();
+        });
+        keyboardManager.bind('ctrl+r', function() {
+            document.getElementById('run').click();
+        });
+        keyboardManager.bind('ctrl+shift+x', function() {
+            document.getElementById('cancel').click();
+        });
+        keyboardManager.bind('ctrl+shift+l', function() {
+            document.getElementById('logout').click();
+        });
+        keyboardManager.bind('alt+x', function() {
+            document.getElementById('search').focus();
+        });
+        keyboardManager.bind('ctrl+shift+h', function() {
+            document.getElementById('help').click();
+        });
+        keyboardManager.bind('ctrl+n', function() {
+            document.getElementById('next').click();
+        });
+        keyboardManager.bind('ctrl+p', function() {
+            document.getElementById('prev').click();
+        });
       scope.changeLang = function (lang) {
           translate.uses(lang.code);
-          scope.optlang = lang;
+          localStorageService.add('Language',lang);
       };
 
       sessionManager.restore(function(session) {
         scope.currentSession = session;
+        if (session.user != null) {
+          localStorageService.add('userPermissions',session.user.userPermissions);
+        };
       });
+
+      $rootScope.showTask = function(taskName){
+        $rootScope.userPermissions = localStorageService.get('userPermissions');
+        return _.contains($rootScope.userPermissions, "ALL_FUNCTIONS_READ") || _.contains($rootScope.userPermissions, taskName);
+      };
     }
   });
   mifosX.ng.application.controller('MainController', [
@@ -93,6 +177,7 @@
     '$translate',
     '$rootScope',
     'localStorageService',
+    'keyboardManager',
     mifosX.controllers.MainController
   ]).run(function($log) {
     $log.info("MainController initialized");

@@ -27,7 +27,7 @@
         <div class="control-group">
             <label class="control-label">{{ 'label.input.dob' | translate }}</label>
             <div class="controls">
-                <input id="dob" class="date-disable" readonly type="text" datepicker-pop="dd MMMM yyyy" ng-model="date.first" is-open="opened" min="minDate" max="restrictDate"/>
+                <input id="dob" sort type="text" datepicker-pop="dd MMMM yyyy" ng-model="date.first" is-open="opened" min="minDate" max="restrictDate"/>
             </div>
         </div>
         <div class="control-group">
@@ -62,8 +62,8 @@
             </div>
         </div>
         <div class="offset2 paddedleft120">
-            <a href="#/viewloanaccount/{{template.loanId}}" class="btn">{{ 'label.button.cancel' | translate }}</a>
-            <button type="submit" class="btn btn-primary">{{ 'label.button.save' | translate }}</button>
+            <a id="cancel" href="#/viewloanaccount/{{template.loanId}}" class="btn">{{ 'label.button.cancel' | translate }}</a>
+            <button id="save" type="submit" class="btn btn-primary">{{ 'label.button.save' | translate }}</button>
         </div>
     </fieldset>
 </form>

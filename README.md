@@ -1,3 +1,13 @@
+# MifosX Community App
+
+This is the default web application built on top of the MifosX platform for the mifos user community. It is a Single-Page App (SPA) written in web standard technologies like JavaScript, CSS and HTML5. It leverages common popular frameworks/libraries such as AngularJS, Bootstrap and Font Awesome.
+
+## Build Status
+
+Travis
+
+[![Build Status](https://travis-ci.org/openMF/community-app.png?branch=master)](https://travis-ci.org/openMF/community-app)
+
 ## Online Demo
 
 <a target="_blank" href="https://demo.openmf.org/beta">Access the online demo version here</a>
@@ -31,40 +41,12 @@ npm install -g grunt-cli
 You are done.
 
 ### Connecting to a MifosX Platform running on a different host:
-Out of the box, the UI will connect to the MifosX Platform running on the *same* host/port because 
-the default value of API_URL_OVERRIDE is set to *false* in the configuration.js file.
-If you want to connect to a MifosX Platform running on a different host, e.g. the https://demo.openmf.org running in the cloud, 
-then modify the configuration API_URL_OVERRIDE and HOST in 
-```
-community-app\app\scripts\modules\configurations.js 
-```
 
-as below:
-
-```
-.constant('API_URL_OVERRIDE', 'true')
-.constant('HOST','https://demo.openmf.org')
-.constant('API_VERSION','/mifosng-provider/api/v1')
-```
-
-Similarly, to connect to a local server running on a different port than the web app on localhost, use:
-
-```
-.constant('API_URL_OVERRIDE', 'true')
-.constant('HOST','https://localhost:8443\:8443') // need to escape port number
-```
-
-Later, it may be possible to specify the baseApiUrl as part of the app's URL, watch 
-
-<a href="https://github.com/openMF/community-app/issues/199">Issue 199</a> (help/pull requests most welcome!). 
-
-By default, when the app is running in the local filesystem, it will connect to demo.openmf.org.
+By default, when the app is running in the local filesystem or on http://localhost, it will connect to demo.openmf.org.
 The UI will connect to the mifosng-provider REST API running on the same host/port when running in the cloud.
 
-If you want to connect to the API running elsewhere, e.g. the https://xyz.org or https://localhost:8443, 
-append the baseApiUrl as a query parameter. 
-Ex:-  /index.html?baseApiUrl=https://localhost:8443
-      /index.html?baseApiUrl=https://xyz.org
+If you want to connect to the API running elsewhere, then append the baseApiUrl as a query parameter,
+e.g. http://localhost:9090/app/index.html?baseApiUrl=https://localhost:8443/#/.
 
 ## Adding dependencies
 
@@ -105,3 +87,4 @@ Just open test/SpecRunner.html in the browser.
 ## Contribution guidelines
 
 Please read the <a href="https://github.com/openMF/community-app/blob/master/Contributing.md" >contribution guidelines</a>
+

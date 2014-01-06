@@ -70,6 +70,9 @@
           case "unassignloanofficer":
             location.path('/loanaccount/' + accountId + '/unassignloanofficer');
           break;
+          case "loanscreenreport":
+            location.path('/loanscreenreport/' + accountId);
+          break;
         }
       };
 
@@ -102,7 +105,7 @@
           scope.guarantorDetails = data.guarantors;
           scope.status = data.status.value;
           scope.chargeAction = data.status.value == "Submitted and pending approval" ? true : false;
-
+          scope.decimals = data.currency.decimalPlaces;
           if(scope.loandetails.charges) {
             scope.charges = scope.loandetails.charges;
               for(var i in scope.charges){
@@ -133,10 +136,6 @@
                                 icon :"icon-plus-sign"
                               },
                               {
-                                name:"button.addcollateral",
-                                icon :"icon-link"
-                              },
-                              {
                                 name:"button.approve",
                                 icon :"icon-ok"
                               },
@@ -160,7 +159,13 @@
                                 name:"button.delete"
                               },
                               {
+                                  name:"button.addcollateral"
+                              },
+                              {
                                 name:"button.guarantor"
+                              },
+                              {
+                                name:"button.loanscreenreport"
                               }]
                               
                             };
@@ -186,6 +191,9 @@
                               },
                               {
                                name:"button.guarantor"
+                              },
+                              {
+                                name:"button.loanscreenreport"
                               }]
                               
                             };
@@ -217,6 +225,9 @@
                               },
                               {
                                  name:"button.close"
+                              },
+                              {
+                                name:"button.loanscreenreport"
                               }]
                               
                             };
@@ -267,22 +278,6 @@
             $modalInstance.dismiss('cancel');
         };
       };
-      scope.getLoanTemplateDocuments = function() {
-        resourceFactory.templateResource.get({entityId : 1, typeId : 0}, function(data) {
-          scope.loanTemplateData = data;
-        })
-      }
-
-      scope.getLoanTemplate = function(templateId) {
-        scope.selectedTemplate = templateId;
-        http({
-          method:'POST',
-          url: API_VERSION + '/templates/'+templateId+'?loanId='+routeParams.id,
-          data: {}
-        }).then(function(data) {
-          scope.template = data.data;
-        });
-      }
 
       scope.getLoanDocuments = function (){
         resourceFactory.LoanDocumentResource.getLoanDocuments({loanId: routeParams.id}, function(data) {
@@ -306,7 +301,7 @@
           scope.datatabledetails = data;
           scope.datatabledetails.isData = data.data.length > 0 ? true : false;
           scope.datatabledetails.isMultirow = data.columnHeaders[0].columnName == "id" ? true : false;
-
+          scope.singleRow = [];
           for(var i in data.columnHeaders) {
             if (scope.datatabledetails.columnHeaders[i].columnCode) {
               for (var j in scope.datatabledetails.columnHeaders[i].columnValues){
@@ -318,6 +313,16 @@
               }
             } 
           }
+            if(scope.datatabledetails.isData){
+                for(var i in data.columnHeaders){
+                    if(!scope.datatabledetails.isMultirow){
+                        var row = {};
+                        row.key = data.columnHeaders[i].columnName;
+                        row.value = data.data[0].row[i];
+                        scope.singleRow.push(row);
+                    }
+                }
+            }
 
         });
       };

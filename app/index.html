@@ -114,13 +114,23 @@
     </div>
     <nav>
         <ul class="margin-nav nav nav-list ext-sidenav">
-            <li><a class="bolder black" href="#/expertsearch"><i class="icon-desktop icon-large"></i>&nbsp;&nbsp;&nbsp;{{ 'label.anchor.dashhome' | translate}}</a></li>
+            <li><a class="bolder black" href="#/expertsearch"><i class="icon-desktop icon-large"></i>&nbsp;&nbsp;&nbsp;{{ 'label.anchor.dashboard' | translate}}</a></li>
             <li class="divider"></li>
             <li><a class="bolder black" href="#/nav/offices"><i class="icon-compass icon-large"></i>&nbsp;&nbsp;{{ 'label.anchor.navigation' | translate}}</a></li>
             <li class="divider"></li>
-            <li><a class="bolder black" href="#/tasks"><i class="icon-bell-alt icon-large"></i>&nbsp;&nbsp;{{ 'label.anchor.tasks' | translate}}</a></li>
+            <li><a class="bolder black" href="#/tasks"><i class="icon-check icon-large"></i>&nbsp;&nbsp;{{ 'label.anchor.tasks' | translate}}</a></li>
             <li class="divider"></li>
             <li><a class="bolder black" href="#/entercollectionsheet"><i class="icon-tasks icon-large"></i>&nbsp;&nbsp;{{ 'label.anchor.collectionsheet' | translate}}</a></li>
+            <li class="divider"></li>
+            <li><a class="bolder black" href="#/freqposting"><i class="icon-repeat icon-large"></i>&nbsp;&nbsp;&nbsp;{{ 'label.anchor.frequentpostings' | translate}}</a></li>
+            <li class="divider"></li>
+            <li><a class="bolder black" href="#/journalentry"><i class="icon-plus icon-large"></i>&nbsp;&nbsp;&nbsp;&nbsp;{{ 'label.anchor.addjournalentries' | translate}}</a></li>
+            <li class="divider"></li>
+            <li><a class="bolder black" href="#/accounts_closure"><i class="icon-folder-close icon-large"></i>&nbsp;&nbsp;&nbsp;{{ 'label.anchor.closingentries' | translate}}</a></li>
+            <li class="divider"></li>
+            <li><a class="bolder black" href="#/accounting_coa"><i class="icon-sitemap icon-large"></i>&nbsp;&nbsp;&nbsp;{{ 'label.heading.chartofaccounts' | translate}}</a></li>
+            <li class="divider"></li>
+            <li><a class="bolder black" href="#/reports/all"><i class="icon-table icon-large"></i>&nbsp;&nbsp;&nbsp;{{ 'label.anchor.reports' | translate}}</a></li>
             <li class="divider"></li>
             <li><a class="bolder black" href="#/createclient"><i class="icon-user icon-large"></i> &nbsp;&nbsp;+ {{ 'label.anchor.client' | translate}} </a></li>
             <li class="divider"></li>
@@ -128,11 +138,7 @@
             <li class="divider"></li>
             <li><a class="bolder black" href="#/createcenter"><i class="icon-group icon-large"></i> + {{ 'label.anchor.center' | translate}}</a></li>
             <li class="divider"></li>
-            <li><a class="bolder black" href="#/freqposting"><i class="icon-repeat icon-large"></i>&nbsp;&nbsp;&nbsp;{{ 'label.anchor.frequentpostings' | translate}}</a></li>
-            <li class="divider"></li>
-            <li><a class="bolder black" href="#/journalentry"><i class="icon-plus icon-large"></i>&nbsp;&nbsp;&nbsp;&nbsp;{{ 'label.anchor.addjournalentries' | translate}}</a></li>
-            <li class="divider"></li>
-            <li><a class="bolder black" href="#/accounts_closure"><i class="icon-folder-close icon-large"></i>&nbsp;&nbsp;&nbsp;{{ 'label.anchor.closingentries' | translate}}</a></li>
+            <li><a class="bolder black" href="#/help"><i class="icon-question-sign icon-large"></i>&nbsp;&nbsp;&nbsp;{{ 'label.anchor.help' | translate }}</a></li>
         </ul>
     </nav>
     <div class="navbar navbar-fixed-top">
@@ -159,6 +165,7 @@
                                 <li><a href="#/reports/loans">{{ 'label.anchor.loans' | translate }}</a></li>
                                 <li><a href="#/reports/funds">{{ 'label.anchor.funds' | translate }}</a></li>
                                 <li><a href="#/reports/accounting">{{ 'label.anchor.accounting' | translate }}</a></li>
+                                <li><a href="#/xbrl">{{ 'label.anchor.xbrl' | translate }}</a></li>
                             </ul>
                         </li>
                         <li class="dropdown" id="preview-menu">
@@ -178,14 +185,15 @@
                         <li class="dropdown" id="user-menu">
                             <a id="user-dropdown" class="dropdown-toggle" data-toggle="dropdown" href="#">{{currentSession.user.name}}<b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#"><i class="icon-user"></i>{{ 'label.anchor.profile' | translate }}</a></li>
+                                <li><a id="help" href="#/help"><i class="icon-question-sign"></i>{{ 'label.anchor.help' | translate }}</a></li>
+                                <li><a href="#/profile"><i class="icon-user"></i>{{ 'label.anchor.profile' | translate }}</a></li>
                                 <li><a href="#/usersetting"><i class="icon-cog"></i>{{ 'label.anchor.settings' | translate }}</a></li>
-                                <li><a data-ng-click="logout()"><i class="icon-off"></i>{{ 'label.anchor.logout' | translate }}</a></li>
+                                <li><a id="logout" data-ng-click="logout()"><i class="icon-off"></i>{{ 'label.anchor.logout' | translate }}</a></li>
                             </ul>
                         </li>
                     </ul>
                     <form ng-submit="search()" class="navbar-search pull-right ng-pristine ng-valid">
-                    <input data-ng-model="search.query" type="text" placeholder="Search" class="search-query span2">
+                        <input id="search" data-ng-model="search.query" type="text" placeholder="{{ 'label.searchorpress' | translate }}" class="search-query span3">
                     </form>
                 </div>
             </div>
@@ -206,6 +214,7 @@
 <!-- Le javascript -->
 <script type='text/javascript' data-main="scripts/loader.js" src='bower_components/requirejs/require.js'></script>
 <!-- Placed at the end of the document so the pages load faster -->
+<!-- devcode: !production -->
 <!-- begin olark code -->
 <script data-cfasync="false" type='text/javascript'>/*<![CDATA[*/window.olark||(function(c){var f=window,d=document,l=f.location.protocol=="https:"?"https:":"http:",z=c.name,r="load";var nt=function(){
 f[z]=function(){
@@ -226,5 +235,6 @@ loader: "static.olark.com/jsclient/loader0.js",name:"olark",methods:["configure"
 /* custom configuration goes here (www.olark.com/documentation) */
 olark.identify('9391-547-10-6064');/*]]>*/</script><noscript><a href="https://www.olark.com/site/9391-547-10-6064/contact" title="Send Feedback" target="_blank">Questions? Feedback?</a> powered by <a href="http://www.olark.com?welcome" title="Olark live chat software">Olark live chat software</a></noscript>
 <!-- end olark code -->
+<!-- endcode -->
 </body>
 </html>

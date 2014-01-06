@@ -2,7 +2,7 @@
 	<div>
 		<ul class="breadcrumb">
 			<li><a href="#/viewsavingaccount/{{transfer.fromAccount.id}}">{{'label.anchor.viewsavingaccount' | translate}}</a> <span class="divider">/</span></li>
-			<li class="active">{{'legend.heading.account.transfers' | translate}}</li>
+			<li class="active">{{'label.anchor.accounttransfers' | translate}}</li>
 		</ul>
 	</div>
 	<api-validate></api-validate>
@@ -80,7 +80,7 @@
 		<div class="control-group">
 			<label class="control-label" for="transferDate">{{ 'label.input.transactiondate' | translate }}<span class="required">*</span></label>
 			<div class="controls">
-				<input class="date-disable" readonly type="text" id="transferDate" datepicker-pop="dd MMMM yyyy" ng-model="formData.transferDate" is-open="opened" min="'2000-01-01'" max="restrictDate"/>
+				<input  type="text" id="transferDate" datepicker-pop="dd MMMM yyyy" ng-model="formData.transferDate" is-open="opened" min="'2000-01-01'" max="restrictDate"/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -91,8 +91,8 @@
 			</div>
 		</div>
 	    <div class="offset3">
-	      <button type="reset" class="btn">{{ 'label.button.cancel' | translate }}</button>
-	      <button type="submit" class="btn btn-primary">{{ 'label.button.save' | translate }}</button>
+	      <button id="cancel" type="reset" class="btn">{{ 'label.button.cancel' | translate }}</button>
+	      <button id="save" type="submit" class="btn btn-primary">{{ 'label.button.save' | translate }}</button>
 	    </div>
 	  </fieldset>
 	</form>

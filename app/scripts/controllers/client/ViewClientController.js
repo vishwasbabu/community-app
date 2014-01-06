@@ -1,11 +1,19 @@
 (function(module) {
   mifosX.controllers = _.extend(module, {
-    ViewClientController: function(scope, routeParams , route, location, resourceFactory, http, $modal, API_VERSION) {
+    ViewClientController: function(scope, routeParams , route, location, resourceFactory, http, $modal, API_VERSION,$rootScope,$upload) {
         scope.client = [];
         scope.identitydocuments = [];
         scope.buttons = [];
         scope.clientdocuments = [];
         scope.staffData = {};
+        scope.openLoan = true;
+        scope.openSaving = true;
+        scope.routeToLoan = function(id){
+          location.path('/viewloanaccount/' + id);
+        };
+        scope.routeToSaving = function(id){
+            location.path('/viewsavingaccount/' + id);
+        };
         scope.haveFile = [];
         resourceFactory.clientResource.get({clientId: routeParams.id} , function(data) {
             scope.client = data;
@@ -13,7 +21,7 @@
             if (data.imagePresent) {
               http({
                 method:'GET',
-                url: API_VERSION + '/clients/'+routeParams.id+'/images'
+                url: $rootScope.hostUrl + API_VERSION + '/clients/'+routeParams.id+'/images'
               }).then(function(imageData) {
                 scope.image = imageData.data;
               });
@@ -112,6 +120,12 @@
               }
             }
 
+            scope.buttonsArray = {
+              options: [{
+                          name:"button.clientscreenreports"
+                        }]
+            };
+            scope.buttonsArray.singlebuttons = scope.buttons;
           resourceFactory.runReportsResource.get({reportSource: 'ClientSummary',genericResultSet: 'false',R_clientId: routeParams.id} , function(data) {
             scope.client.ClientSummary = data[0];
           });
@@ -121,6 +135,36 @@
                 templateUrl: 'deleteClient.html',
                 controller: ClientDeleteCtrl
             });
+        };
+        scope.uploadPic = function () {
+            $modal.open({
+                templateUrl: 'uploadpic.html',
+                controller: UploadPicCtrl
+            });
+        };
+        var UploadPicCtrl = function ($scope, $modalInstance) {
+            $scope.onFileSelect = function($files) {
+                scope.file = $files[0];
+            };
+            $scope.upload = function () {
+                if (scope.file) {
+                    $upload.upload({
+                        url: $rootScope.hostUrl + API_VERSION + '/clients/'+routeParams.id+'/images',
+                        data: {},
+                        file: scope.file
+                    }).then(function(imageData) {
+                            // to fix IE not refreshing the model
+                            if (!scope.$$phase) {
+                                scope.$apply();
+                            }
+                            route.reload();
+                        });
+                }
+                $modalInstance.close('upload');
+            };
+            $scope.cancel = function () {
+                $modalInstance.dismiss('cancel');
+            };
         };
         scope.unassignStaffCenter = function () {
             $modal.open({
@@ -153,7 +197,40 @@
         resourceFactory.clientAccountResource.get({clientId: routeParams.id} , function(data) {
             scope.clientAccounts = data;
         });
-
+        scope.isClosed = function(loanaccount) {
+            if(loanaccount.status.code === "loanStatusType.closed.written.off" ||
+                loanaccount.status.code === "loanStatusType.closed.obligations.met" ||
+                loanaccount.status.code === "loanStatusType.closed.reschedule.outstanding.amount" ||
+                loanaccount.status.code === "loanStatusType.withdrawn.by.client" ||
+                loanaccount.status.code === "loanStatusType.rejected") {
+                return true;
+            } else{
+                return false;
+            }
+        };
+        scope.isSavingClosed = function(savingaccount) {
+            if (savingaccount.status.code === "savingsAccountStatusType.withdrawn.by.applicant" ||
+                savingaccount.status.code === "savingsAccountStatusType.closed" ||
+                savingaccount.status.code === "savingsAccountStatusType.rejected") {
+                return true;
+            } else{
+                return false;
+            }
+        };
+        scope.setLoan = function(){
+            if(scope.openLoan){
+                scope.openLoan = false
+            }else{
+                scope.openLoan = true;
+            }
+        };
+        scope.setSaving = function(){
+            if(scope.openSaving){
+                scope.openSaving = false;
+            }else{
+                scope.openSaving = true;
+            }
+        };
         resourceFactory.clientNotesResource.getAllNotes({clientId: routeParams.id} , function(data) {
             scope.clientNotes = data;
         });
@@ -179,23 +256,6 @@
           });
         };
 
-        scope.getClientTemplateDocuments = function() {
-          resourceFactory.templateResource.get({entityId : 0, typeId : 0}, function(data) {
-            scope.clientTemplateData = data;
-          })
-        }
-
-        scope.getClientTemplate = function(templateId) {
-          scope.selectedTemplate = templateId;
-          http({
-            method:'POST',
-            url: API_VERSION + '/templates/'+templateId+'?clientId='+routeParams.id,
-            data: {}
-          }).then(function(data) {
-            scope.template = data.data;
-          });
-        }
-
         resourceFactory.DataTablesResource.getAllDataTables({apptable: 'm_client'} , function(data) {
           scope.clientdatatables = data;
         });
@@ -206,7 +266,7 @@
             scope.datatabledetails = data;
             scope.datatabledetails.isData = data.data.length > 0 ? true : false;
             scope.datatabledetails.isMultirow = data.columnHeaders[0].columnName == "id" ? true : false;
-
+            scope.singleRow = [];
             for(var i in data.columnHeaders) {
               if (scope.datatabledetails.columnHeaders[i].columnCode) {
                 for (var j in scope.datatabledetails.columnHeaders[i].columnValues){
@@ -218,10 +278,18 @@
                 }
               } 
             }
+            if(scope.datatabledetails.isData){
+            for(var i in data.columnHeaders){
+                if(!scope.datatabledetails.isMultirow){
+                  var row = {};
+                  row.key = data.columnHeaders[i].columnName;
+                  row.value = data.data[0].row[i];
+                  scope.singleRow.push(row);
+                }
+            }}
 
           });
         };
-
         scope.deleteAll = function (apptableName, entityId) {
           resourceFactory.DataTablesResource.delete({datatablename:apptableName, entityId:entityId, genericResultSet:'true'}, {}, function(data){
             route.reload();
@@ -251,30 +319,28 @@
                 scope.clientdocuments.splice(index,1);
             });
         };
-        scope.isNotClosed = function(loanaccount) {
+
+        scope.isLoanNotClosed = function (loanaccount) {
           if(loanaccount.status.code === "loanStatusType.closed.written.off" || 
             loanaccount.status.code === "loanStatusType.closed.obligations.met" || 
             loanaccount.status.code === "loanStatusType.closed.reschedule.outstanding.amount" || 
             loanaccount.status.code === "loanStatusType.withdrawn.by.client" || 
             loanaccount.status.code === "loanStatusType.rejected") {
             return false;
-          } else{
+          } else {
              return true;
           }
         };
 
-        scope.isClosed = function(loanaccount) {
-          if(loanaccount.status.code === "loanStatusType.closed.written.off" ||
-            loanaccount.status.code === "loanStatusType.closed.obligations.met" || 
-            loanaccount.status.code === "loanStatusType.closed.reschedule.outstanding.amount" || 
-            loanaccount.status.code === "loanStatusType.withdrawn.by.client" || 
-            loanaccount.status.code === "loanStatusType.rejected") {
-            return true;
-          } else{
-             return false;
+        scope.isSavingNotClosed = function (savingaccount) {
+          if (savingaccount.status.code === "savingsAccountStatusType.withdrawn.by.applicant" || 
+            savingaccount.status.code === "savingsAccountStatusType.closed" ||
+            savingaccount.status.code === "savingsAccountStatusType.rejected") {
+            return false;
+          } else {
+             return true;
           }
         };
-
 
         scope.saveNote = function() {   
             resourceFactory.clientResource.save({clientId: routeParams.id, anotherresource: 'notes'}, this.formData , function(data){
@@ -295,8 +361,9 @@
         scope.downloadClientIdentifierDocument=function (identifierId, documentId){
           console.log(identifierId,documentId);
         };
-
+        // devcode: !production
 		// *********************** InVenture controller ***********************
+
         scope.fetchInventureScore = function(){
           // dummy data for the graph - DEBUG purpose
           var inventureScore = getRandomInt(450,800);
@@ -384,10 +451,10 @@
 
           // this will be used to display the score on the viewclient.html
           scope.inventureScore = inventureScore;
-        };
+        };    // endcode
     }
   });
-  mifosX.ng.application.controller('ViewClientController', ['$scope', '$routeParams', '$route', '$location', 'ResourceFactory', '$http','$modal', 'API_VERSION', mifosX.controllers.ViewClientController]).run(function($log) {
+  mifosX.ng.application.controller('ViewClientController', ['$scope', '$routeParams', '$route', '$location', 'ResourceFactory', '$http','$modal', 'API_VERSION','$rootScope','$upload', mifosX.controllers.ViewClientController]).run(function($log) {
     $log.info("ViewClientController initialized");
   });
 }(mifosX.controllers || {}));

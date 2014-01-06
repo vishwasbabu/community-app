@@ -70,7 +70,7 @@
               </td>
               <td width="30%">
                 <label class="control-label">{{ 'label.input.submittedon' | translate }}&nbsp;<span class="required">*</span></label>
-                <input id="submittedOnDate" class="date-disable" readonly type="text" datepicker-pop="dd MMMM yyyy" ng-model="formData.submittedOnDate" is-open="opened" min="'2000-01-01'" max="restrictDate"/>
+                <input id="submittedOnDate" sort type="text" datepicker-pop="dd MMMM yyyy" ng-model="formData.submittedOnDate" is-open="opened" min="'2000-01-01'" max="restrictDate"/>
               </td>
             </tr>
             <tr class="control-group">
@@ -148,8 +148,8 @@
                   <td>
                     <label class="control-label">{{ 'label.input.nominalinterestrate' | translate }}&nbsp;<span class="required">*</span></label>
                     <input id="interestRatePerPeriod" class="input-small" name="nominalinterestrate" type="text" ng-model="formData.interestRatePerPeriod" required late-Validate/>
-                    <select id="interestRateFrequencyType" class="input-small" ng-model="formData.interestRateFrequencyType" ng-options="interestRateFrequencyType.id as interestRateFrequencyType.value for interestRateFrequencyType in loanaccountinfo.interestRateFrequencyTypeOptions" value="{{interestRateFrequencyType.id}}"></select>
-                    <form-validate valattributeform="newjlgloanform" valattribute="nominalinterestrate"/>
+                      &nbsp;&nbsp; {{loanaccountinfo.interestRateFrequencyType.value}}
+                      <form-validate valattributeform="newjlgloanform" valattribute="nominalinterestrate"/>
                   </td>
                   <td></td>
                 </tr>
@@ -337,8 +337,8 @@
       </div>
 
       <div class="offset6">
-        <button type="reset" class="btn" ng-click="cancel()">{{'label.button.cancel' | translate}}</button>
-        <button type="submit" class="btn btn-primary" ng-show="loanaccountinfo">{{'label.button.save' | translate}}</button>
+        <button id="cancel" type="reset" class="btn" ng-click="cancel()">{{'label.button.cancel' | translate}}</button>
+        <button id="save" type="submit" class="btn btn-primary" ng-show="loanaccountinfo">{{'label.button.save' | translate}}</button>
       </div>
     </fieldset>
 </form>

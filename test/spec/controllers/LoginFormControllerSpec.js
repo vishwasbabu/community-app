@@ -6,6 +6,11 @@ describe("LoginFormController", function() {
       eventListener = listener;
     });
     this.authenticationService = jasmine.createSpyObj("AuthenticationService", ['$on']);
+    $ = jQuery = jasmine.createSpy('jQuery');
+    $.keypress = jasmine.createSpy('$.keypress()');
+    $.andCallFake(function(selector) {
+        return $;
+    });
 
     this.controller = new mifosX.controllers.LoginFormController(this.scope, this.authenticationService);
   });
@@ -13,7 +18,7 @@ describe("LoginFormController", function() {
   it("should initialise the login credentials", function() {
     expect(this.scope.loginCredentials).toEqual({});
   });
-  
+
   it("should initialise the authenticationFailed flag", function() {
     expect(this.scope.authenticationFailed).toBeFalsy();
   });

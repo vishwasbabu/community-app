@@ -13,8 +13,9 @@
           return resource(baseUrl + url, paramDefaults, actions);
         };
         return {
-          userResource: defineResource(apiVer + "/users/:userId", {}, {
-            getAllUsers: {method: 'GET', params: {fields: "id,firstname,lastname,username,officeName"}, isArray: true}
+          userResource: defineResource(apiVer + "/users/:userId", {userId:'@userId'}, {
+            getAllUsers: {method: 'GET', params: {fields: "id,firstname,lastname,username,officeName"}, isArray: true},
+            getUser: {method:'GET',params:{}}
           }),
           roleResource: defineResource(apiVer + "/roles/:roleId", {}, {
             getAllRoles: {method: 'GET', params: {}, isArray: true}
@@ -60,6 +61,7 @@
           }),
           groupResource: defineResource(apiVer + "/groups/:groupId/:anotherresource", {groupId:'@groupId',anotherresource:'@anotherresource'}, {
               get: {method: 'GET', params: {}},
+              getAllGroups: {method: 'GET', params: {}, isArray:true},
               update: { method: 'PUT'}
           }),
           groupSummaryResource: defineResource(apiVer + "/runreports/:reportSource",{reportSource: '@reportSource'}, {
@@ -89,6 +91,13 @@
             get: {method: 'GET', params: {id:'@id'}},
             getReport: {method: 'GET', params: {id:'@id'}, isArray:true},
             getReportDetails: {method: 'GET', params: {id:'@id'}},
+            update: {method: 'PUT', params: {}}
+          }),
+          xbrlMixtaxonomyResource: defineResource(apiVer + "/mixtaxonomy", {}, {
+            get: {method: 'GET', params: {}, isArray:true}
+          }),
+          xbrlMixMappingResource: defineResource(apiVer + "/mixmapping", {}, {
+            get: {method: 'GET', params: {}, isArray:true},
             update: {method: 'PUT', params: {}}
           }),
           DataTablesResource: defineResource(apiVer + "/datatables/:datatablename/:entityId/:resourceId", {datatablename:'@datatablename',entityId:'@entityId', resourceId:'@resourceId'}, {
@@ -203,7 +212,8 @@
               getAllHols: {method: 'GET', params: {}, isArray: true}
           }),
           holValueResource: defineResource(apiVer + "/holidays/:holId", {holId:'@holId'}, {
-              getholvalues: {method: 'GET', params: {}}
+              getholvalues: {method: 'GET', params: {}},
+              update: { method: 'PUT', params: {}, isArray:true }
           }),
           savingsTemplateResource: defineResource(apiVer + "/savingsaccounts/template", {}, {
               get: {method: 'GET', params: {}}
@@ -234,6 +244,7 @@
           }),
           centerResource: defineResource(apiVer + "/centers/:centerId/:anotherresource", {centerId:'@centerId',anotherresource:'@anotherresource'}, {
             get: {method: 'GET', params: {}},
+            getAllCenters: {method: 'GET', params: {}, isArray: true},
             update: { method: 'PUT'}
           }),
           centerMeetingResource:defineResource(apiVer + "/centers/:centerId/meetings/:templateSource", {centerId:'@centerId',templateSource:'@templateSource'}, {

@@ -47,13 +47,13 @@
             <div class="control-group" data-ng-switch-when="1">
                 <label class="control-label">{{'label.input.activationdate' | translate}}<span class="required">*</span></label>
                 <div class="controls">
-                    <input class="date-disable" readonly id="activationDate" type="text" datepicker-pop="dd MMMM yyyy" ng-model="first.date" is-open="opened" min="'2000-01-01'" max="restrictDate"/>
+                    <input  id="activationDate" type="text" datepicker-pop="dd MMMM yyyy" ng-model="first.date" is-open="opened" min="'2000-01-01'" max="restrictDate"/>
                 </div>
             </div>
         </div>
         <div class="offset2 paddedleft120">
             <a href="#/viewgroup/{{groupId}}" class="btn">{{ 'label.button.cancel' | translate }}</a>
-            <button type="submit" class="btn btn-primary">{{ 'label.button.save' | translate }}</button>
+            <button id="save" type="submit" class="btn btn-primary">{{ 'label.button.save' | translate }}</button>
         </div>
     </fieldset>
 </form>

@@ -9,17 +9,19 @@ describe("MainController", function() {
     this.sessionManager.restore.andCallFake(function(callback) {
       sessionCallback = callback;
     });
+    this.keyboardManager= jasmine.createSpyObj('keyboardManager',['bind']);
 
-    this.translate = jasmine.createSpy();
+    this.translate = jasmine.createSpyObj("translate", ["uses"]);
     this.rootScope = jasmine.createSpy();
-    this.localStorageService = jasmine.createSpyObj("localStorageService", ["get"]);
+    this.localStorageService = jasmine.createSpyObj("localStorageService", ["get", "add"]);
 
     this.controller = new mifosX.controllers.MainController(this.scope,
                                                             this.location,
                                                             this.sessionManager,
                                                             this.translate,
                                                             this.rootScope,
-                                                            this.localStorageService);
+                                                            this.localStorageService,
+                                                            this.keyboardManager);
   });
 
   describe("on initialisation", function() {
@@ -31,12 +33,17 @@ describe("MainController", function() {
       sessionCallback("test_session");
       expect(this.scope.currentSession).toEqual("test_session");
     });
+
+    it("should set the dateformat in the scope" , function() {
+        expect(this.scope.dateformat).toEqual("dd MMMM yyyy");
+        expect(this.scope.df).toEqual("dd MMMM yyyy");
+    });
   });
 
   describe("on receving 'UserAuthenticationSuccessEvent'", function() {
     beforeEach(function() {
       this.sessionManager.get.andReturn("test_session");
-      
+
       eventListener({}, "test_data");
     });
 
@@ -52,7 +59,7 @@ describe("MainController", function() {
   describe("User logout", function() {
     beforeEach(function() {
       this.sessionManager.clear.andReturn("test_session");
-      
+
       this.scope.logout();
     });
 

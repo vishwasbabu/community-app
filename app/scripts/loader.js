@@ -2,7 +2,6 @@
     require.config({
         paths: {
             'jquery':           '../bower_components/jquery/jquery',
-            'data-tables':      '../bower_components/datatables/media/js/jquery.dataTables',
             'angular':          '../bower_components/angular/angular',
             'angular-resource': '../bower_components/angular-resource/angular-resource',
             'angular-translate':'../bower_components/angular-translate/angular-translate',
@@ -13,20 +12,22 @@
             'underscore':       '../bower_components/underscore/underscore',
             'webstorage':       '../bower_components/angular-webstorage/angular-webstorage',
             'require-css':      '../bower_components/require-css/css',
-            'require-less':     '../bower_components/require-less/less',
             'd3':               '../bower_components/d3/d3',
             'nvd3':             '../bower_components/nvd3/nv.d3',
             'nvd3ChartDirectives':'../scripts/modules/angularjs-nvd3-directives',
             'styles':           '../styles',
             'test':             '../../test/functional',
             'notificationWidget':'../scripts/modules/notificationWidget',
-            'modified.datepicker':'../scripts/modules/datepicker',
             'configurations':'../scripts/modules/configurations',
             'angularFileUpload':'../bower_components/angularjs-file-upload/angular-file-upload',
             'angularFileUploadShim':'../bower_components/angularjs-file-upload/angular-file-upload-shim',
             'ngSanitize':       '../bower_components/angular-sanitize/angular-sanitize',
             'ckEditor':         '../bower_components/ckeditor/ckeditor',
-            'LocalStorageModule':'../scripts/modules/localstorage'
+            'LocalStorageModule':'../scripts/modules/localstorage',
+            'ngCsv':            "../scripts/modules/csv",
+            'chosen.jquery.min':   "../scripts/modules/chosen.jquery.min",
+            'frAngular':        '../scripts/modules/KeyboardManager',
+            'modified.datepicker':'../scripts/modules/datepicker'
         },
         shim: {
             'angular': { exports: 'angular' },
@@ -36,6 +37,7 @@
             'angularui': { deps: ['angular'] },
             'angularuitpls': { deps: ['angular' ,'angularui' ] },
             'angular-mocks': { deps: ['angular'] },
+            'ngSanitize':{deps:['angular'],exports:'ngSanitize'},
             'webstorage': { deps: ['angular'] },
             'd3': {exports: 'd3'},
             'nvd3': { deps: ['d3']},
@@ -43,10 +45,12 @@
             'configurations':{deps: ['angular']},
             'notificationWidget':{deps: ['angular','jquery'],exports:'notificationWidget'},
             'angularFileUpload':{deps: ['angular','jquery','angularFileUploadShim'],exports:'angularFileUpload'},
-            'modified.datepicker':{deps: ['angular']},
-            'ngSanitize':{deps:['angular'],exports:'ngSanitize'},
             'ckEditor':{deps:['jquery']},
             'LocalStorageModule':{deps:['angular']},
+            'ngCsv':{deps:['angular']},
+            'chosen.jquery.min':{deps:['jquery']},
+            'frAngular':{deps:['angular']},
+            'modified.datepicker':{deps: ['angular']},
             'mifosX': {
                 deps: [
                     'angular',
@@ -57,7 +61,6 @@
                     'angularui',
                     'angularuitpls',
                     'webstorage',
-                    'data-tables',
                     'nvd3ChartDirectives',
                     'notificationWidget',
                     'angularFileUpload',
@@ -66,7 +69,10 @@
                     'ckEditor',
                     'configurations',
                     'LocalStorageModule',
-                    'angularFileUploadShim'
+                    'angularFileUploadShim',
+                    'ngCsv',
+                    'chosen.jquery.min',
+                    'frAngular'
                 ],
                 exports: 'mifosX'
             }
@@ -76,11 +82,6 @@
                 name: 'css',
                 location: '../bower_components/require-css',
                 main: 'css'
-            },
-            {
-                name: 'less',
-                location: '../bower_components/require-less',
-                main: 'less'
             }
         ]
     });

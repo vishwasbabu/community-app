@@ -4,21 +4,27 @@
         scope.formData = {};
         scope.first = {};
         scope.restrictDate = new Date();
+        resourceFactory.officeResource.getAllOffices(function(data) {
+            scope.parentId = scope.offices[0].id;
+        });
         resourceFactory.officeResource.get({officeId: routeParams.id, template: 'true'} , function(data) {
+            scope.offices = data.allowedParents;
+            scope.id = data.id;
             if(data.openingDate){
-            var editDate = dateFilter(data.openingDate,'dd MMMM yyyy');
+            var editDate = dateFilter(data.openingDate,scope.df);
             scope.first.date = new Date(editDate); }
             scope.formData =
           {
               name : data.name,
-              externalId : data.externalId
+              externalId : data.externalId,
+              parentId : data.parentId
           }
         });
         
         scope.submit = function() {
-            var reqDate = dateFilter(scope.first.date,'dd MMMM yyyy');
-            this.formData.locale = 'en';
-            this.formData.dateFormat = 'dd MMMM yyyy';
+            var reqDate = dateFilter(scope.first.date,scope.df);
+            this.formData.locale = scope.optlang.code;
+            this.formData.dateFormat = scope.df;
             this.formData.openingDate = reqDate;
             resourceFactory.officeResource.update({'officeId': routeParams.id},this.formData,function(data){
              location.path('/viewoffice/' + data.resourceId);

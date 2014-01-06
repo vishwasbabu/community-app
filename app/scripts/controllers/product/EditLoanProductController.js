@@ -9,6 +9,10 @@
         scope.penaltySpecificIncomeaccounts = [];
         scope.configureFundOption = {};
         scope.date = {};
+        scope.irFlag = false;
+        scope.pvFlag = false;
+        scope.rvFlag = false;
+
         resourceFactory.loanProductResource.get({loanProductId : routeParams.id, template:'true'}, function(data) {
             scope.product = data;
             scope.assetAccountOptions = scope.product.accountingMappingOptions.assetAccountOptions || [];
@@ -20,6 +24,7 @@
             if(data.closeDate){scope.date.second = new Date(data.closeDate);}
             scope.formData = {
               name : scope.product.name,
+              shortName : scope.product.shortName,
               description : scope.product.description,
               fundId : scope.product.fundId,
               description : scope.product.description,
@@ -160,11 +165,11 @@
               //to charge select box empty
               scope.chargeId = '';
           });
-        }
+        };
 
         scope.deleteCharge = function(index) {
             scope.charges.splice(index,1);
-        }
+        };
 
         //advanced accounting rule
         scope.showOrHide = function(showOrHideValue) {
@@ -175,7 +180,7 @@
           if(showOrHideValue == "hide") {
             scope.showOrHideValue = 'show';
           }
-        }
+        };
 
         scope.addConfigureFundSource = function() {
           if (scope.product.paymentTypeOptions && scope.product.paymentTypeOptions.length > 0 && 
@@ -187,7 +192,7 @@
                 assetAccountOptions : scope.assetAccountOptions
               });
           }
-        }
+        };
 
         scope.mapFees = function() {
           if (scope.product.chargeOptions && scope.product.chargeOptions.length > 0 && scope.incomeAccountOptions && scope.incomeAccountOptions.length > 0) {
@@ -198,7 +203,7 @@
               incomeAccountOptions : scope.product.accountingMappingOptions.incomeAccountOptions
             });
           }
-        }
+        };
 
         scope.mapPenalty = function() {
           if (scope.product.penaltyOptions && scope.product.penaltyOptions.length > 0 && scope.incomeAccountOptions && scope.incomeAccountOptions.length > 0) {
@@ -209,57 +214,70 @@
               incomeAccountOptions : scope.incomeAccountOptions
             });
           }
-        }
+        };
 
         scope.addPrincipalVariation = function() {
+            scope.pvFlag=true;
           scope.formData.principalVariationsForBorrowerCycle.push({
             valueConditionType : scope.product.valueConditionTypeOptions[0].id
           })
-        }
+        };
         scope.addInterestRateVariation = function() {
+            scope.irFlag = true;
           scope.formData.interestRateVariationsForBorrowerCycle.push({
             valueConditionType : scope.product.valueConditionTypeOptions[0].id
           })
-        }
+        };
         scope.addNumberOfRepaymentVariation = function() {
+            scope.rvFlag = true;
           scope.formData.numberOfRepaymentVariationsForBorrowerCycle.push({
             valueConditionType : scope.product.valueConditionTypeOptions[0].id
           })
-        }
+        };
 
 
         scope.deleteFund = function(index) {
           scope.configureFundOptions.splice(index,1);
-        } 
+        };
 
         scope.deleteFee = function(index) {
           scope.specificIncomeaccounts.splice(index,1);
-        }
+        };
 
         scope.deletePenalty = function(index) {
           scope.penaltySpecificIncomeaccounts.splice(index,1);
-        } 
+        };
 
         scope.deletePrincipalVariation = function(index) {
             scope.formData.principalVariationsForBorrowerCycle.splice(index,1);
-        }
+        };
 
         scope.deleteInterestRateVariation = function(index) {
             scope.formData.interestRateVariationsForBorrowerCycle.splice(index,1);
-        }
+        };
 
         scope.deleterepaymentVariation = function(index) {
             scope.formData.numberOfRepaymentVariationsForBorrowerCycle.splice(index,1);
-        }
-
-
+        };
+        scope.setFlag = function(){
+            if(scope.formData.principalVariationsForBorrowerCycle){
+                  scope.pvFlag = true;
+            }
+            if(scope.formData.numberOfRepaymentVariationsForBorrowerCycle){
+                 scope.rvFlag = true;
+            }
+            if(scope.formData.interestRateVariationsForBorrowerCycle){
+                scope.irFlag = true;
+            }
+        };
+        scope.setFlag();
         scope.submit = function() {
           scope.paymentChannelToFundSourceMappings = [];
           scope.feeToIncomeAccountMappings = [];
           scope.penaltyToIncomeAccountMappings = [];
           scope.chargesSelected = [];
-          var reqFirstDate = dateFilter(scope.date.first,'dd MMMM yyyy');
-          var reqSecondDate = dateFilter(scope.date.second,'dd MMMM yyyy');
+          var reqFirstDate = dateFilter(scope.date.first,scope.df);
+          var reqSecondDate = dateFilter(scope.date.second,scope.df);
           var temp = '';
           //configure fund sources for payment channels 
           for (var i in scope.configureFundOptions) {

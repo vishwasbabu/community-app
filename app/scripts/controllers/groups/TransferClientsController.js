@@ -3,7 +3,7 @@
         TransferClientsController: function(scope, routeParams , route, location, resourceFactory) {
             scope.group = [];
             scope.tempData = [];
-            resourceFactory.groupResource.get({} , function(data) {
+            resourceFactory.groupResource.get({paged: 'true', orderBy: 'name', sortOrder: 'ASC'} , function(data) {
                 scope.groups = _.reject(data.pageItems, function(group){ return group.id == routeParams.id; });
             });
             resourceFactory.groupResource.get({groupId: routeParams.id,associations:'all'} , function(data) {
@@ -18,7 +18,7 @@
                 scope.view = 1;
             };
             scope.transfer = function(){
-                this.formData.locale = 'en';
+                this.formData.locale = scope.optlang.code;
                 this.formData.clients=[];
                 var temp = new Object();
                 for(var i=0; i<scope.tempData.length;i++)

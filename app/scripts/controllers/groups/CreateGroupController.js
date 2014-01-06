@@ -13,7 +13,7 @@
             scope.added = [];
             scope.formData = {};
             scope.formData.clientMembers = [];
-            resourceFactory.groupTemplateResource.get(function(data) {
+            resourceFactory.groupTemplateResource.get({orderBy: 'name', sortOrder: 'ASC'}, function(data) {
                 scope.offices = data.officeOptions;
                 scope.staffs = data.staffOptions;
                 scope.clients = data.clientOptions;
@@ -71,11 +71,17 @@
                 for(var i in scope.addedClients){
                     scope.formData.clientMembers[i] = scope.addedClients[i].id;
                 }
-                var reqDate = dateFilter(scope.first.date,'dd MMMM yyyy');
-                this.formData.activationDate = reqDate;
+                if(this.formData.active){
+                    var reqDate = dateFilter(scope.first.date,scope.df);
+                    this.formData.activationDate = reqDate;
+                }
+                if (scope.first.submitondate) {
+                    reqDat = dateFilter(scope.first.submitondate,scope.df);
+                    this.formData.submittedOnDate = reqDat;
+                }
 
-                this.formData.locale  = 'en';
-                this.formData.dateFormat =  'dd MMMM yyyy';
+                this.formData.locale  = scope.optlang.code;
+                this.formData.dateFormat =  scope.df;
                 this.formData.active = this.formData.active || false;
                 resourceFactory.groupResource.save(this.formData,function(data){
                     location.path('/viewgroup/' + data.resourceId);
