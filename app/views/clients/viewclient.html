@@ -610,6 +610,104 @@
 				</div>
 			</div>
 		</tab>
+		<tab heading="{{'label.heading.family.members' | translate}}" select="getFamilyMembers()">
+			<div class="col-md-12 col-sm-12">
+				<div class="thumbnail row whitebg">
+					<div class="pull-right btn-group">
+						<a href="#/addfamilymember/{{client.id}}" class="btn btn-primary"
+						   has-permission='CREATE_FAMILYDETAIL'><i class="icon-plus icon-white"></i>{{
+							'label.button.add.family.member' | translate }}</a>
+					</div>
+					<div class="form-group">
+						<div class="row"></div>
+					</div>
+					<div class="form-group">
+						<div class="row">
+
+						</div>
+					</div>
+					<div class="col-md-12 col-sm-12">
+						<div class="thumbnail row whitebg"
+							 ng-repeat="familyMember in familyMembersData track by $index">
+							<fieldset>
+								<legend>{{'label.section.heading.family.member' | translate}} #{{($index+1)}}</legend>
+								<div class="form-group">
+									<div class="row">
+										<label class="control-label col-sm-2">
+											{{'label.input.salutation' | translate}}
+										</label>
+										<div class="col-sm-1">:</div>
+										<div class="col-sm-6">{{familyMember.salutation.name}}</div>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="row">
+										<label class="control-label col-sm-2">
+											{{'label.input.name' | translate}}
+										</label>
+										<div class="col-sm-1">:</div>
+										<div class="col-sm-6">
+											{{familyMember.firstname}}&nbsp;{{familyMember.middlename}}&nbsp;{{familyMember.lastname}}
+										</div>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="row">
+										<label class="control-label col-sm-2">
+											{{'label.input.relationship' | translate}}
+										</label>
+										<div class="col-sm-1">:</div>
+										<div class="col-sm-6">{{familyMember.relationship.name}}</div>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="row">
+										<label class="control-label col-sm-2">
+											{{'label.input.dateofbirth' | translate}}
+										</label>
+										<div class="col-sm-1">:</div>
+										<div class="col-sm-6">{{familyMember.dateOfBirth}}</div>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="row">
+										<label class="control-label col-sm-2">
+											{{'label.input.gender' | translate}}
+										</label>
+										<div class="col-sm-1">:</div>
+										<div class="col-sm-6">{{familyMember.gender.name}}</div>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="row">
+										<label class="control-label col-sm-2">
+											{{'label.input.occupation' | translate}}
+										</label>
+										<div class="col-sm-1">:</div>
+										<div class="col-sm-6">{{familyMember.occupation.name}}</div>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="row">
+										<label class="control-label col-sm-2">
+											{{'label.input.education' | translate}}
+										</label>
+										<div class="col-sm-1">:</div>
+										<div class="col-sm-6">{{familyMember.education.name}}</div>
+									</div>
+								</div>
+							</fieldset>
+						</div>
+					</div>
+				</div>
+			</div>
+		</tab>
 		<tab heading="{{'label.heading.identities' | translate}}" select="getClientIdentityDocuments()"
 		     has-permission='READ_CLIENTIDENTIFIER'>
 		    <div class="pull-right btn-group">

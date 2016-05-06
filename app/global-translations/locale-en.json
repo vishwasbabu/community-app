@@ -3930,5 +3930,15 @@
     "label.heading.escheatLiability":"Escheat Liability",
     "label.input.escheatLiability":"Escheat Liability",
     "label.tooltip.escheatLiability":"Liability Account where escheated funds are maintained",
-    "label.heading.lastActive":"Last Active"
+    "label.heading.lastActive":"Last Active",
+
+
+    "label.input.occupation":"Occupation",
+    "label.input.education":"Education",
+    "label.input.salutation":"Salutation",
+    "label.button.add.family.member": "Add a Family Member",
+    "label.heading.add.family.member":"Add a Family Member",
+    "label.anchor.add.family.member" : "Add Family Member",
+    "label.heading.family.members": "Family Members",
+    "label.section.heading.family.member": "Family Member"
 }

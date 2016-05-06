@@ -627,6 +627,12 @@
                 };
             }
 
+            scope.getFamilyMembers = function (){
+                resourceFactory.familyMembersResource.getAllFamilyMembers({clientId: routeParams.id}, function (data) {
+                   scope.familyMembersData = data;
+                });
+            }
+
         }
     });
 

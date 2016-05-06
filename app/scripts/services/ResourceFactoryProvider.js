@@ -48,6 +48,12 @@
                         getAllClientDocuments: {method: 'GET', params: {}, isArray: true},
                         update: { method: 'PUT'}
                     }),
+                    familyMemberTemplateResource: defineResource(apiVer + "/clients/:clientId/familymembers/template", {clientId: '@clientId'}, {
+                        getFamilyMemberTemplate: {method: 'GET', params: {},isArray: false}
+                    }),
+                    familyMembersResource: defineResource(apiVer + "/clients/:clientId/familymembers", {clientId: '@clientId'}, {
+                        getAllFamilyMembers: {method: 'GET', params: {},isArray: true}
+                    }),
                     clientChargesResource: defineResource(apiVer + "/clients/:clientId/charges/:resourceType", {clientId: '@clientId', resourceType: '@resourceType'}, {
                         getCharges: {method: 'GET'},
                         waive:{method:'POST' , params:{command : 'waive'}}

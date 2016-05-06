@@ -883,8 +883,9 @@
             })
             .when('/shareproduct/:productId/:dividendId/:action', {
                 templateUrl: 'views/products/shareproductactions.html'
-            })
-        ;
+            }).when('/addfamilymember/:clientId', {
+                templateUrl: 'views/clients/addfamilymember.html'
+            });
         $locationProvider.html5Mode(false);
     };
     mifosX.ng.application.config(defineRoutes).run(function ($log) {
